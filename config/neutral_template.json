@@ -1,0 +1,61 @@
+{
+  "brow_inner_height": {
+    "mean": 0.22,
+    "sd": 0.035
+  },
+  "brow_outer_height": {
+    "mean": 0.15,
+    "sd": 0.035
+  },
+  "brow_mid_height": {
+    "mean": 0.24,
+    "sd": 0.035
+  },
+  "brow_gap": {
+    "mean": 0.33,
+    "sd": 0.04
+  },
+  "eye_opening": {
+    "mean": 0.105,
+    "sd": 0.022
+  },
+  "mouth_width": {
+    "mean": 0.55,
+    "sd": 0.06
+  },
+  "corner_lift": {
+    "mean": -0.01,
+    "sd": 0.03
+  },
+  "lip_gap": {
+    "mean": 0.0,
+    "sd": 0.03
+  },
+  "lower_face_height": {
+    "mean": 0.68,
+    "sd": 0.06
+  },
+  "upper_lip_height": {
+    "mean": 0.16,
+    "sd": 0.03
+  },
+  "lower_lip_chin": {
+    "mean": 0.34,
+    "sd": 0.045
+  },
+  "lip_thickness": {
+    "mean": 0.16,
+    "sd": 0.035
+  },
+  "nose_width": {
+    "mean": 0.48,
+    "sd": 0.05
+  },
+  "nose_length": {
+    "mean": 0.49,
+    "sd": 0.05
+  },
+  "_meta": {
+    "source": "v0.1 anthropometric approximations \u2014 replace with training/calibrate_neutral_template.py"
+  }
+}

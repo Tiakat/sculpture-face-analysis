@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+runtime/
+
+# Local data — never committed (accounts, uploads, downloaded museum images, indexes)
+*/data/*
+!*/data/models/
+*/data/models/*
+!*/data/models/.gitkeep
+*.db
+.jwt_secret
+admin_emails.txt
+api_keys.env
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

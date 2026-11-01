@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global Face Heritage Platform</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">◍</span>
+    <div>
+      <div class="brand-title">Global Face Heritage Platform</div><span id="ver" class="hidden"></span>
+    </div>
+  </div>
+  <nav id="nav" class="nav hidden">
+    <button data-view="analyse" class="active">Analyse</button>
+    <button data-view="objects">My analyses</button>
+    <button data-view="references">Reference corpus</button>
+    <button data-view="admin" id="nav-admin" class="hidden">Admin</button>
+    <span id="whoami" class="who"></span>
+    <button id="logout" class="ghost">Sign out</button>
+  </nav>
+</header>
+
+<main id="app">
+<section id="view-auth" class="view">
+  <div class="auth-card">
+    <div class="tabs"><button class="tab active" data-tab="login">Sign in</button><button class="tab" data-tab="register">Create account</button></div>
+    <form id="login-form" class="tab-panel">
+      <label>E-mail <input type="email" name="email" required autocomplete="username"></label>
+      <label>Password <input type="password" name="password" required autocomplete="current-password"></label>
+      <button class="primary" type="submit">Sign in</button>
+      <p class="small"><a href="#" id="forgot-link">Password forgotten?</a></p>
+    </form>
+    <form id="forgot-form" class="tab-panel hidden">
+      <label>E-mail <input type="email" name="email" required></label>
+      <button class="primary" type="submit">Send me a reset link</button>
+      <p class="muted small">If no e-mail service is configured on this installation, the administrator receives the request and hands you the link.</p>
+      <p class="small"><a href="#" class="back-login">Back to sign in</a></p>
+    </form>
+    <form id="reset-form" class="tab-panel hidden">
+      <p class="small">Choose a new password.</p>
+      <label>New password <input type="password" name="password" required minlength="10" autocomplete="new-password"></label>
+      <button class="primary" type="submit">Save new password</button>
+    </form>
+    <form id="register-form" class="tab-panel hidden">
+      <label>Full name <input type="text" name="full_name"></label>
+      <label>Institution <input type="text" name="institution"></label>
+      <label>E-mail <input type="email" name="email" required autocomplete="username"></label>
+      <label>Password <input type="password" name="password" required minlength="10" autocomplete="new-password" placeholder="≥ 10 characters, letters and digits"></label>
+      <button class="primary" type="submit">Create researcher account</button>
+      <p class="muted small">Administrator rights are reserved to the configured administrator e-mail; all other accounts are researchers who see only their own analyses.</p>
+    </form>
+    <p id="auth-msg" class="msg"></p>
+  </div>
+</section>
+
+<section id="view-analyse" class="view hidden">
+  <div class="grid-2">
+    <div class="card">
+      <h2>1 · Image</h2>
+      <div id="drop" class="drop">
+        <input type="file" id="file" accept=".jpg,.jpeg,.png,.tif,.tiff,.bmp,.webp" hidden>
+        <div id="drop-text">Drop a photograph of a sculpture, painting, drawing, print or person here — or <u>browse</u></div>
+        <img id="preview" class="hidden" alt="preview">
+      </div>
+      <div id="boxtool" class="hidden" style="margin:-6px 0 14px">
+        <p class="small">Drag a rectangle around the face on the image below, then click <b>Run analysis</b>. The rectangle is only a geometric hint — it carries no cultural information. <button type="button" class="btn" id="box-clear">Clear</button> <span id="box-info" class="muted small"></span></p>
+        <canvas id="boxcanvas" style="max-width:100%;cursor:crosshair;border-radius:6px;border:1px solid #cbbfae"></canvas>
+      </div>
+      <p class="small" style="margin-top:-8px"><a href="#" id="box-open">Face not found automatically (mask, stylised or abstract face)? Draw the face rectangle</a></p>
+      <h2>2 · Object record <span class="muted small">(optional — leave unknown fields empty; the platform proposes culture / region / period / material from the reference corpus after analysis)</span></h2>
+      <div class="fw">Metadata firewall: culture, region, period and material are stored with the object and used only <i>after</i> analysis for grouping and affinity. They cannot influence the expression or morphology computation.</div>
+      <form id="meta-form" class="meta">
+        <label>Title <input name="title"></label>
+        <label>Institution <input name="institution"></label>
+        <label>Object number <input name="object_number"></label>
+        <label>Domain <select name="domain" data-tax="domain"></select></label>
+        <label>Region <select name="region" data-tax="region"></select></label>
+        <label>Culture <select name="culture" data-tax="culture"></select></label>
+        <label>Culture subgroup / phase <input name="culture_subgroup" placeholder="e.g. Moche IV, New Kingdom"></label>
+        <label>Period <select name="period" data-tax="period"></select></label>
+        <label>Material <select name="material" data-tax="material"></select></label>
+        <label>Technique <select name="technique" data-tax="technique"></select></label>
+        <label>Object type <select name="object_type" data-tax="object_type"></select></label>
+        <label>Subject <select name="subject_type" data-tax="subject_type"></select></label>
+        <label>Representation <select name="representation_type" data-tax="representation_type"></select></label>
+        <label>Restoration <select name="restoration_status" data-tax="restoration_status"></select></label>
+        <label>Polychromy <select name="polychromy" data-tax="polychromy"></select></label>
+        <label>Date start (year, negative = BCE) <input name="date_start" type="number"></label>
+        <label>Date end <input name="date_end" type="number"></label>
+        <label>Date precision <select name="date_precision" data-tax="date_precision"></select></label>
+        <label>Date as displayed <input name="date_display" placeholder="e.g. 400–600 CE"></label>
+        <label>Country <input name="country"></label>
+        <label>Site / find-spot <input name="site"></label>
+        <label>Artist <input name="artist"></label>
+        <label>Mould / workshop group <input name="mold_group" placeholder="keeps related objects in one split"></label>
+        <label>Image licence <select name="license" data-tax="license"></select></label>
+        <label>Cultural sensitivity <select name="cultural_sensitivity" data-tax="cultural_sensitivity"></select></label>
+        <label>Source URL <input name="source_url"></label>
+        <label>View angle (this image) <select name="view_angle" data-tax="view_angle"></select></label>
+        <label>Photographer <input name="photographer"></label>
+        <label class="wide">Provenance / notes <input name="provenance_text"></label>
+      </form>
+      <button id="run" class="primary big" disabled>Run analysis</button>
+      <p id="run-msg" class="msg"></p>
+    </div>
+    <div class="card info">
+      <h2>Four separated layers</h2>
+      <ol class="pipeline">
+        <li><b>Objective visual information</b> — quality gate, 478 landmarks per face (multiple faces per image), pose, symmetry</li>
+        <li><b>FACS-inspired action units</b> — implied configuration for depicted faces; facial-action estimate for photographs of people</li>
+        <li><b>Expression category</b> — probabilities, confidence, explicit UNKNOWN, stability under lighting/perturbation</li>
+        <li><b>Historical / cultural interpretation</b> — reference retrieval and morphological affinity by culture, region, period or material, computed on the reference sample <i>after</i> the facial layers</li>
+      </ol>
+      <p class="muted small">Difficulty level 0–6 (clear frontal → abstract) is reported per face so performance can be stated per level rather than as one number.</p>
+      <div id="ref-banner" class="banner hidden"></div>
+    </div>
+  </div>
+</section>
+
+<section id="view-result" class="view hidden"></section>
+
+<section id="view-objects" class="view hidden">
+  <div class="card">
+    <div class="row between"><h2>My analyses <span class="muted small">(every uploaded image belongs to an object record)</span></h2>
+      <div class="row"><input id="obj-q" placeholder="search title / number / institution" style="padding:7px"><select id="obj-culture"><option value="">all cultures</option></select><select id="obj-domain"><option value="">all domains</option></select><label class="small admin-only hidden"><input type="checkbox" id="obj-mine"> mine only</label></div></div>
+    <table class="tbl" id="obj-table"><thead><tr><th>Created</th><th>Title</th><th>Domain</th><th>Culture / region</th><th>Period · date</th><th>Institution</th><th>Licence</th><th>Img / faces</th><th></th></tr></thead><tbody></tbody></table>
+  </div>
+</section>
+
+<section id="view-object" class="view hidden"></section>
+
+<section id="view-references" class="view hidden">
+  <div class="card"><h2>Reference corpus <span id="ref-version" class="pill"></span></h2>
+    <p class="muted small">Open-access images and records downloaded from museum databases. They are the comparison material for retrieval, morphometric affinity and suggested attribution. Only the administrator can build or extend the corpus.</p>
+    <div id="corpus-builder" class="admin-only hidden">
+      <form id="corpus-form" class="row gap">
+        <label class="small">Sources <select name="sources" multiple size="5" style="width:auto"><option value="met" selected>The Met (no key)</option><option value="artic" selected>Art Institute of Chicago (no key)</option><option value="cleveland" selected>Cleveland Museum of Art (no key)</option><option value="wikimedia" selected>Wikimedia Commons (no key)</option><option value="europeana">Europeana (key)</option><option value="smithsonian">Smithsonian (key)</option><option value="getty">Getty</option><option value="rijksmuseum">Rijksmuseum</option><option value="harvard">Harvard (key)</option></select></label>
+        <label class="small">Search terms (one per line; empty = general face/portrait terms)<textarea name="queries" rows="4" style="width:280px" placeholder="moche portrait head&#10;roman portrait bust&#10;egyptian head&#10;benin head&#10;maya figurine"></textarea></label>
+        <label class="small">Max objects per term<input name="limit" type="number" value="400" min="10" max="2000" style="width:90px"></label>
+        <button class="primary" type="submit">Build / extend corpus</button>
+      </form>
+      <details class="small" style="margin:8px 0"><summary>Museum API keys (free; needed for Harvard, Smithsonian, Europeana)</summary>
+        <form id="keys-form" class="row gap" style="margin-top:6px">
+          <label class="small">Harvard <input name="HARVARD_API_KEY" placeholder="harvardartmuseums.org/collections/api" style="width:220px"></label>
+          <label class="small">Smithsonian <input name="SMITHSONIAN_API_KEY" placeholder="api.data.gov/signup" style="width:220px"></label>
+          <label class="small">Europeana <input name="EUROPEANA_API_KEY" placeholder="pro.europeana.eu/page/get-api" style="width:220px"></label>
+          <button class="btn" type="submit">Save keys</button> <span id="keys-status" class="muted small"></span>
+        </form></details>
+      <pre id="corpus-status" class="small" style="max-height:260px;overflow:auto;background:#f3f6f9;padding:8px;border-radius:6px"></pre>
+    </div>
+    <p id="ref-persist" class="muted small"></p><div id="ref-stats" class="stats"></div><div id="ref-grid" class="ref-grid"></div></div>
+</section>
+
+
+<section id="view-admin" class="view hidden">
+  <div class="card"><h2>Platform statistics</h2><div id="admin-stats" class="stats"></div>
+    <div class="row gap">
+      <button class="btn" id="export-gold">Export gold-standard set (JSONL)</button>
+      <button class="btn" id="scan-dups">Scan duplicates</button>
+      <button class="btn" id="reload-ref">Reload reference index</button>
+      <button class="btn" id="reload-tax">Reload taxonomy</button>
+      <select id="split-level"><option value="object">split: object/mould</option><option value="institution">split: institution</option><option value="culture">split: culture</option><option value="region">split: region</option></select>
+      <button class="btn" id="plan-split">Preview split</button>
+    </div><pre id="split-out" class="small"></pre></div>
+  <div class="card"><h2>Research collections (versioned subsets)</h2>
+    <form id="coll-form" class="row gap"><input name="name" placeholder="name, e.g. Moche portrait vessels" required><input name="version" value="0.1" style="width:70px"><select name="culture"><option value="">culture filter…</option></select><select name="domain"><option value="">domain filter…</option></select><button class="primary" type="submit">Create</button></form>
+    <table class="tbl" id="coll-table"><thead><tr><th>Name</th><th>Version</th><th>Filter</th><th>Objects</th><th></th></tr></thead><tbody></tbody></table></div>
+  <div class="card"><h2>Flagged annotations awaiting review</h2>
+    <table class="tbl" id="flags-table"><thead><tr><th>Date</th><th>Object / face</th><th>Model</th><th>Annotator</th><th>Layer</th><th>Comment</th><th>Decision</th></tr></thead><tbody></tbody></table></div>
+  <div class="card"><h2>Users</h2><p class="muted small" id="mail-status"></p>
+    <table class="tbl" id="users-table"><thead><tr><th>ID</th><th>E-mail</th><th>Name</th><th>Institution</th><th>Role</th><th>FACS-certified</th><th>Active</th><th>Last sign-in</th><th>Images</th><th>Annotations</th><th>Account</th></tr></thead><tbody></tbody></table></div>
+  <div class="card"><h2>Controlled taxonomy</h2><p class="muted small">Edit <code>config/taxonomy.json</code> and click Reload taxonomy. External identifiers (Getty AAT/TGN, PeriodO, Wikidata) can be attached per term.</p><div id="tax-stats" class="stats"></div><div id="tax-body"></div></div>
+  <div class="card"><h2>Audit log</h2><table class="tbl small" id="audit-table"><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Target</th><th>Details</th><th>IP</th></tr></thead><tbody></tbody></table></div>
+</section>
+</main>
+<footer class="foot">Research prototype · frozen model v0.1 · every result requires expert validation · culture is metadata, never a model feature</footer>
+<script src="/static/app.js"></script>
+</body>
+</html>
